@@ -2,8 +2,9 @@ package com.example.sistemaacademico.service;
 
 import com.example.sistemaacademico.model.Disciplina;
 import com.example.sistemaacademico.repository.DisciplinaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.sistemaacademico.repository.MatriculaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,22 +12,35 @@ import java.util.Optional;
 @Service
 public class DisciplinaService {
 
-    @Autowired
-    private DisciplinaRepository disciplinaRepository;
+    private final DisciplinaRepository disciplinaRepository;
+    private final MatriculaRepository matriculaRepository;
 
-    public List<Disciplina> findAll() {
-        return disciplinaRepository.findAll();
+    public DisciplinaService(DisciplinaRepository disciplinaRepository, MatriculaRepository matriculaRepository) {
+        this.disciplinaRepository = disciplinaRepository;
+        this.matriculaRepository = matriculaRepository;
     }
 
-    public Optional<Disciplina> findById(Long id) {
+    // Buscar disciplina por ID
+    public Optional<Disciplina> buscarPorId(Long id) {
         return disciplinaRepository.findById(id);
     }
 
-    public Disciplina save(Disciplina disciplina) {
+    // Salvar ou atualizar disciplina
+    public Disciplina salvar(Disciplina disciplina) {
         return disciplinaRepository.save(disciplina);
     }
 
-    public void deleteById(Long id) {
+    // Listar todas as disciplinas
+    public List<Disciplina> listarTodas() {
+        return disciplinaRepository.findAll();
+    }
+
+    // Excluir disciplina e todas as matrículas associadas
+    @Transactional
+    public void excluirPorId(Long id) {
+        // Excluir todas as matrículas associadas à disciplina
+        matriculaRepository.deleteByDisciplinaId(id);
+        // Excluir a disciplina
         disciplinaRepository.deleteById(id);
     }
 }

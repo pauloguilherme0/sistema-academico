@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Disciplinas Matriculadas por Aluno</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Disciplinas Matriculadas por: <span th:text="${aluno.nome}"></span></h2>
+
+    <!-- Feedback amigável -->
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome da Disciplina</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="disciplina : ${disciplinas}">
+            <td th:text="${disciplina.id}"></td>
+            <td th:text="${disciplina.nome}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <a href="/aluno/list" class="btn btn-secondary">Voltar</a>
+    </div>
+</div>
+</body>
+</html>
